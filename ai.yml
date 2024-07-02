@@ -1,0 +1,47 @@
+---
+ 
+ - hosts: all
+   become: true
+   pre_tasks:
+ 
+   - name: install apache and php for Ubuntu servers
+     apt:
+       name:
+         - apache2
+         - libapache2-mod-php
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+ 
+   - name: install apache and php for Rocky servers
+     dnf:
+       name:
+         - httpd
+         - php
+       state: latest
+       update_cache: yes
+     when: ansible_distribution == "Rocky"
+
+
+ - hosts: db_servers
+   become: true
+   tasks:
+     - name: install mariadb package (Rocky)
+       dnf:
+         name: mariadb
+         state: latest
+       when: ansible_distribution == "Rocky"
+
+     - name: install mariadb package (Ubuntu)
+       apt:
+         name: mariadb_server
+         state: latest
+       when: ansible_distribution == "Ubuntu"
+
+ - hosts: ai_servers
+   become: true
+   tasks:
+     - name: install cowsay package
+       package:
+         name: cowsay
+         state: latest

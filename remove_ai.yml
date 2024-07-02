@@ -1,0 +1,14 @@
+---
+ 
+ - hosts: all
+   become: true
+   pre_tasks:
+ 
+
+ - hosts: ai_servers
+   become: true
+   tasks:
+     - name: remove cowsay package
+       package:
+         name: cowsay
+         state: absent
